@@ -210,7 +210,7 @@ function pbckcode_list_highlights() {
   $highlights = array(
     ''=>'No Highlighting',
   );
-  if (module_exists('prism')) {
+  if (module_exists('prettify')) {
     $highlights['PRETTIFY'] = 'Google Code Prettifier';
   }
   if (module_exists('prism')) {

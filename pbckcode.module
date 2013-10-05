@@ -145,11 +145,17 @@ function pbckcode_admin($form, &$form_state) {
     '#default_value' => variable_get('pbckcode_modes', array('html', 'css', 'php', 'javascript')),
   );
 
+  $form['#attached'] = array(
+    'css' => array(
+      'type' => 'file',
+      'data' => drupal_get_path('module', 'pbckcode') . '/css/pbckcode.admin.css',
+    ),
+  );
+
   return system_settings_form($form);
 }
 
 function pbckcode_list_modes() {
-  // TODO: Add rest of modes
   $modes = array(
     'c_pp' => 'C/C++',
     'c9search' => 'C9Search',
@@ -163,7 +169,38 @@ function pbckcode_list_modes() {
     'golang' => 'Go',
     'groovy' => 'Groovy',
     'haxe' => 'Haxe',
+    'html' => 'HTML',
+    'jade' => 'Jade',
+    'java' => 'Java',
+    'javascript' => 'JavaScript',
+    'json' => 'JSON',
+    'jsp' => 'JSP',
+    'jsx' => 'JSX',
+    'latex' => 'LaTeX',
+    'less' => 'LESS',
+    'liquid' => 'Liquid',
+    'lua' => 'Lua',
+    'luapage' => 'LuaPage',
+    'markdown' => 'Markdown',
+    'ocaml' => 'OCaml',
+    'perl' => 'Perl',
+    'pgsql' => 'pgSQL',
     'php' => 'PHP',
+    'powershell' => 'Powershell',
+    'python' => 'Python',
+    'ruby' => 'Ruby',
+    'scad' => 'OpenSCAD',
+    'scala' => 'Scala',
+    'scss' => 'SCSS/Sass',
+    'sh' => 'SH',
+    'sql' => 'SQL',
+    'svg' => 'SVG',
+    'tcl' => 'Tcl',
+    'text' => 'Text',
+    'textile' => 'Textile',
+    'xml' => 'XML',
+    'xq' => 'XQuery',
+    'yaml' => 'YAML',
   );
   return $modes;
 }

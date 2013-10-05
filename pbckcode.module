@@ -116,6 +116,7 @@ function pbckcode_ckeditor_settings_alter(&$settings) {
  * @see  pbckcode_menu()
  */
 function pbckcode_admin($form, &$form_state) {
+
   $form['pbckcode_class'] = array(
     '#type' => 'textfield',
     '#title' => t('Class'),
@@ -129,20 +130,26 @@ function pbckcode_admin($form, &$form_state) {
     '#options' => pbckcode_list_themes(),
     '#default_value' => variable_get('pbckcode_theme', ''),
     '#description' => t('The theme of the ACE Editor of the plugin.'),
+
   );
 
-   $form['pbckcode_highlight'] = array(
+  $form['pbckcode_highlight'] = array(
     '#type' => 'select',
     '#title' => t('Syntax Highlighter'),
     '#options' => pbckcode_list_highlights(),
     '#default_value' => variable_get('pbckcode_highlight', ''),
+    '#description' => t('Select a supported highlighter from the modules you have installed.'),
   );
+  if (count(pbckcode_list_highlights()) < 2) {
+    $form['pbckcode_highlight']['#disabled'] = TRUE;
+  }
 
   $form['pbckcode_modes'] = array(
     '#type' => 'checkboxes',
     '#options' => pbckcode_list_modes(),
     '#title' => t('Which languages are available'),
     '#default_value' => variable_get('pbckcode_modes', array('html', 'css', 'php', 'javascript')),
+    '#description' => t('Not all of these options may be supported by your chosen highlighter. Check the relevant documentation for more details.'),
   );
 
   $form['#attached'] = array(

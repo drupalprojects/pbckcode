@@ -1,6 +1,40 @@
 <?php
 
-define('PBCKCODE_DEFAULT_MODES', array('html', 'css', 'php', 'javascript'));
+/**
+ * Implements hook_requirements().
+ */
+function pbckcode_requirements($phase) {
+  $requirements = array();
+  // Ensure translations don't break during installation.
+  $t = get_t();
+
+  // Check PBCKCode is Installed
+  if ($phase == 'runtime') {
+    $requirements['pbckcode'] = array(
+      'title' => $t('PBCKCode'),
+    );
+    if (libraries_get_path('pbckcode')) {
+      $requirements['pbckcode']['value'] = $t('The PBCKCode library is installed');
+    } else {
+      $requirements['pbckcode']['value'] = $t('You need to install the PBCKCode Library');
+      $requirements['pbckcode']['severity'] = REQUIREMENT_ERROR;
+    }
+  }
+
+  return $requirements;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function pbckcode_permission() {
+  return array(
+    'configure pbckcode' => array(
+      'title' => t('Configure PBCKCode Settings'),
+      'description' => t('Configure PBCKCode settings.'),
+    ),
+  );
+}
 
 /**
  * Implements hook_menu().
@@ -9,8 +43,8 @@ function pbckcode_menu() {
   $items = array();
 
   $items['admin/config/content/pbckcode'] = array(
-    'title' => 'Configure PBCKCode',
-    'description' => 'Configure PBCKCode',
+    'title' => 'PBCKCode',
+    'description' => 'Configure PBCKCode display options.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('pbckcode_admin'),
     'access arguments' => array('configure pbckcode'),
@@ -45,7 +79,7 @@ function pbckcode_ckeditor_plugin() {
 function pbckcode_ckeditor_settings_alter(&$settings) {
   $cls   = variable_get('pbckcode_class', '');
   $theme = variable_get('pbckcode_theme', '');
-  $modes = variable_get('pbckcode_modes', PBCKCODE_DEFAULT_MODES);
+  $modes_selected = variable_get('pbckcode_modes', array('html', 'css', 'php', 'javascript'));
   $highlighter = variable_get('pbckcode_highlight', '');
 
   $pbckcode = array();
@@ -56,6 +90,18 @@ function pbckcode_ckeditor_settings_alter(&$settings) {
   if ($theme !== '') {
     $pbckcode['theme'] = $theme;
   }
+
+  if ($modes != array('html', 'css', 'php', 'javascript')) {
+    $modes = pbckcode_list_modes();
+    $modes_selected = array_filter($modes_selected);
+    foreach ($modes as $key => $mode) {
+      if (isset($modes_selected[$key])) {
+        $js_modes[] = array($mode, $key);
+      }
+    }
+    $pbckcode['modes'] = $js_modes;
+  }
+
 
   if ($highlighter !== '') {
     $pbckcode['highlighter'] = $highlighter;
@@ -96,7 +142,7 @@ function pbckcode_admin($form, &$form_state) {
     '#type' => 'checkboxes',
     '#options' => pbckcode_list_modes(),
     '#title' => t('Which languages are available'),
-    '#default_value' => variable_get('pbckcode_modes', PBCKCODE_DEFAULT_MODES),
+    '#default_value' => variable_get('pbckcode_modes', array('html', 'css', 'php', 'javascript')),
   );
 
   return system_settings_form($form);
@@ -161,13 +207,21 @@ function pbckcode_list_themes() {
 }
 
 function pbckcode_list_highlights() {
-  // TODO: Name Highlights
   $highlights = array(
-    '',
-    'PRETTIFY' => 'Google Code Prettifier',
-    'PRISM' => 'Prism',
-    'HIGHLIGHT' => 'Highlight',
-    'SYNTAX_HIGHLIGHTER' => 'Syntax Highlighter',
+    ''=>'No Highlighting',
   );
+  if (module_exists('prism')) {
+    $highlights['PRETTIFY'] = 'Google Code Prettifier';
+  }
+  if (module_exists('prism')) {
+    $highlights['PRISM'] = 'Prism';
+  }
+  // TODO: Fix Highlight.js
+  // if (module_exists('highlight_js')) {
+  //   $highlights['HIGHLIGHT'] = 'Highlight.js';
+  // }
+  if (module_exists('syntaxhighlighter')) {
+    $highlights['SYNTAX_HIGHLIGHTER'] = 'Syntax Highlighter';
+  }
   return $highlights;
 }

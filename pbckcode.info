@@ -2,3 +2,4 @@ name = PBCKCode for CKEditor
 description = Adds the PBCKCode plugin to CKEditor.
 core = 7.x
 dependencies[] = ckeditor
+dependencies[] = libraries

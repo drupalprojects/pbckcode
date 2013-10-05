@@ -8,7 +8,7 @@ function pbckcode_ckeditor_plugin() {
     'pbckcode' => array(
       'name' => 'pbckcode',
       'desc' => t('PBCKCode plugin - Syntax Highlighting'),
-      'path' => drupal_get_path('module', 'pbckcode') . '/pbckcode/',
+      'path' => libraries_get_path('pbckcode').'/',
       'buttons' => array(
         'pbckcode' => array(
           'icon' => 'icons/pbckcode.png',

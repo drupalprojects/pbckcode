@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * Implements hook_ckeditor_plugin().
+ */
+function pbckcode_ckeditor_plugin() {
+  return array(
+    'pbckcode' => array(
+      'name' => 'pbckcode',
+      'desc' => t('PBCKCode plugin - Syntax Highlighting'),
+      'path' => drupal_get_path('module', 'pbckcode') . '/pbckcode/',
+      'buttons' => array(
+        'pbckcode' => array(
+          'icon' => 'icons/pbckcode.png',
+          'label' => 'Code',
+        ),
+      ),
+    ),
+  );
+}

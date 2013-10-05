@@ -91,7 +91,7 @@ function pbckcode_ckeditor_settings_alter(&$settings) {
     $pbckcode['theme'] = $theme;
   }
 
-  if ($modes != array('html', 'css', 'php', 'javascript')) {
+  if ($modes_selected != array('html', 'css', 'php', 'javascript')) {
     $modes = pbckcode_list_modes();
     $modes_selected = array_filter($modes_selected);
     foreach ($modes as $key => $mode) {

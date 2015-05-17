@@ -6,7 +6,7 @@
  * @todo: Add support for Highlight.js
  */
 
-$pbckcode_default_modes = array('html', 'css', 'php', 'javascript');
+
 
 /**
  * Implements hook_permission().
@@ -63,7 +63,7 @@ function pbckcode_ckeditor_plugin() {
 function pbckcode_ckeditor_settings_alter(&$settings) {
   $cls   = variable_get('pbckcode_class', '');
   $theme = variable_get('pbckcode_theme', '');
-  $modes_selected = variable_get('pbckcode_modes', $pbckcode_default_modes);
+  $modes_selected = variable_get('pbckcode_modes', pbckcode_default_modes());
   $highlighter = variable_get('pbckcode_highlight', '');
 
   $pbckcode = array();
@@ -75,7 +75,7 @@ function pbckcode_ckeditor_settings_alter(&$settings) {
     $pbckcode['theme'] = $theme;
   }
 
-  if ($modes_selected != $pbckcode_default_modes) {
+  if ($modes_selected != pbckcode_default_modes()) {
     $modes = pbckcode_list_modes();
     $modes_selected = array_filter($modes_selected);
     foreach ($modes as $key => $mode) {
@@ -130,7 +130,7 @@ function pbckcode_admin($form, &$form_state) {
     '#type' => 'checkboxes',
     '#options' => pbckcode_list_modes(),
     '#title' => t('Which languages are available'),
-    '#default_value' => variable_get('pbckcode_modes', $pbckcode_default_modes),
+    '#default_value' => variable_get('pbckcode_modes', pbckcode_default_modes()),
     '#description' => t('Not all of these options may be supported by your chosen highlighter. Check the relevant documentation for more details.'),
   );
 
@@ -262,4 +262,13 @@ function pbckcode_list_highlights() {
     $highlights['SYNTAX_HIGHLIGHTER'] = 'Syntax Highlighter';
   }
   return $highlights;
+}
+
+/**
+ * Helper function to list the default enabled highlighting syntaxes.
+ * @return array
+ *   List of default enabled highlighting syntaxes
+ */
+function pbckcode_default_modes() {
+  return array('html', 'css', 'php', 'javascript');
 }

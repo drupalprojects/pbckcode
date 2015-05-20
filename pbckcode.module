@@ -257,7 +257,9 @@ function pbckcode_list_highlights() {
   if (module_exists('prism')) {
     $highlights['PRISM'] = 'Prism';
   }
-  // TODO: Add Highlight.js
+  if (module_exists('highlight_js')) {
+    $highlights['HIGHLIGHT'] = 'Highlight.js';
+  }
   if (module_exists('syntaxhighlighter')) {
     $highlights['SYNTAX_HIGHLIGHTER'] = 'Syntax Highlighter';
   }
